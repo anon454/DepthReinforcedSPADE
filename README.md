@@ -5,7 +5,7 @@
 
 Clone this repo.
 ```bash
-git clone https://github.com/DR-SPADE/Depth-Reinforced-SPADE.git
+git clone https://github.com/anon454/DepthReinforcedSPADE.git
 ```
 
 This code requires PyTorch 1.0 and python 3+. Please install dependencies by
@@ -30,13 +30,13 @@ There are different modes to load images by specifying `--preprocess_mode` along
 
 New models can be trained with the following commands.
 
-1. Prepare dataset. To train on the datasets shown in the paper, you can download the datasets and use `--dataset_mode` option, which will choose which subclass of `BaseDataset` is loaded. For custom datasets, the easiest way is to use `./data/custom_dataset.py` by specifying the option `--dataset_mode custom`, along with `--label_dir [path_to_labels] --color_dir [path_to_rgb_images] --surface_dir [path_to_depth_images] --input_dir [path_to_input_images]`. You also need to specify options such as `--label_nc` for the number of label classes in the dataset, `--contain_dontcare_label` to specify whether it has an unknown label, or `--no_instance` to denote the dataset doesn't have instance maps.
+1. Prepare dataset. To train on the datasets shown in the paper, you can download the datasets and use `--dataset_mode` option, which will choose which subclass of `BaseDataset` is loaded. For custom datasets, the easiest way is to use `./data/custom_dataset.py` by specifying the option `--dataset_mode custom`, along with `--label_dir [path_to_labels] --color_dir [path_to_rgb_images] --surface_dir [path_to_surface_images] --input_dir [path_to_input_images]`. You also need to specify options such as `--label_nc` for the number of label classes in the dataset, `--contain_dontcare_label` to specify whether it has an unknown label, or `--no_instance` to denote the dataset doesn't have instance maps.
 
 2. Train.
 
 ```bash
 # To train on your own custom dataset
-python train.py --name [experiment_name] --dataset_mode custom --label_dir [path_to_labels] -- color_dir [path_to_rgb_images] --surface_dir [path_to_depth_images] --input_dir [path_to_input_images] --label_nc [num_labels]
+python train.py --name [experiment_name] --dataset_mode custom --label_dir [path_to_labels] -- color_dir [path_to_rgb_images] --surface_dir [path_to_surface_images] --input_dir [path_to_input_images] --label_nc [num_labels]
 ```
 
 There are many options you can specify. Please use `python train.py --help`. The specified options are printed to the console. To specify the number of GPUs to utilize, use `--gpu_ids`. If you want to use the second and third GPUs for example, use `--gpu_ids 1,2`.
@@ -61,10 +61,6 @@ Use `--results_dir` to specify the output directory. `--how_many` will specify t
 - `models/networks/`: defines the architecture of all models
 - `options/`: creates option lists using `argparse` package. More individuals are dynamically added in other files as well. Please see the section below.
 - `data/`: defines the class for loading images and label maps.
-
-## Options
-
-This code repo contains many options. Some options belong to only one specific model, and some options have different default values depending on other options. To address this, the `BaseOption` class dynamically loads and sets options depending on what model, network, and datasets are used. This is done by calling the static method `modify_commandline_options` of various classes. It takes in the`parser` of `argparse` package and modifies the list of options. For example, since COCO-stuff dataset contains a special label "unknown", when COCO-stuff dataset is used, it sets `--contain_dontcare_label` automatically at `data/coco_dataset.py`. You can take a look at `def gather_options()` of `options/base_options.py`, or `models/network/__init__.py` to get a sense of how this works.
 
 
 ## Acknowledgments
